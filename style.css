@@ -1,0 +1,44 @@
+body
+{
+	margin: 0;
+	background: #000;
+	font-family: sans-serif;
+}
+.puzzle
+{
+	font-size: 0;
+	width: 100vh;
+	margin: auto;
+	position: relative;
+}
+.puzzle div
+{
+	width: 20vh;
+	height: 20vh;
+	background-size: 100vh !important;
+	display: inline-block;
+	box-shadow: inset 0 0 1px 1px white;
+	position: absolute;
+	transition-property: top, left;
+	transition-duration: 0.25s;
+}
+.odNowa
+{
+	width: 296px;
+	top: calc(50vh - 29px);
+	left: calc(50vw - 150px);
+	font-size: 32px;
+	margin: auto;
+	z-index: 999;
+	position: absolute;
+	background: #0A0;
+	padding: 10px 0;
+	cursor: pointer;
+	border-radius: 10px;
+	color: white;
+	border: 2px solid #080;
+	font-weight: bold;
+	text-align: center;
+	letter-spacing: 1px;
+	display: none;
+}
