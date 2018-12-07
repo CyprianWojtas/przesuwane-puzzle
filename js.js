@@ -19,7 +19,7 @@ function Puzel(url, x, y)
 	this.y = 0;
 	this.ukryty = false;
 
-	this.elementHTML = $('<div style="background: url(' + url + '); background-position-x: ' + (- (100 / rozmiar) * x) + 'vh; background-position-y: ' + (- (100 / rozmiar) * y) + 'vh; top: 0; left: 0; width: ' + (100 / rozmiar) + 'vh; height: ' + (100 / rozmiar) + 'vh;" onClick="przesuwanie(' + x+ ', ' + y + ', true)"></div>');
+	this.elementHTML = $('<div style="background-image: url(' + url + '); background-position-x: ' + (- (100 / rozmiar) * x) + 'vh; background-position-y: ' + (- (100 / rozmiar) * y) + 'vh; top: 0; left: 0; width: ' + (100 / rozmiar) + 'vh; height: ' + (100 / rozmiar) + 'vh;" onClick="przesuwanie(' + x+ ', ' + y + ', true)"></div>');
 
 	this.przesun = function (x, y)
 	{
