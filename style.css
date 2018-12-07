@@ -21,6 +21,7 @@ body
 	position: absolute;
 	transition-property: top, left;
 	transition-duration: 0.25s;
+	background-color: #CCC;
 }
 .odNowa
 {
