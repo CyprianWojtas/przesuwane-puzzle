@@ -1,9 +1,9 @@
 {
 	"name": "Przesuwane puzzle",
-	"short_name": "Przesuwane puzzle",
+	"short_name": "Puzzle",
 	"display": "standalone",
 	"background_color": "#000",
-	"theme_color": "#222",
+	"theme_color": "#000",
 	"dir": "ltr",
 	"lang": "pl",
 	"orientation": "any",
