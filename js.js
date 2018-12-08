@@ -4,12 +4,31 @@ let rozmiarX = 4,
 
 let proporcjaObr = 1;
 
+let puzzle = [];
+let puste = {x: rozmiarX - 1, y: rozmiarY - 1};
+
 var style = document.createElement('style');
 document.body.appendChild(style);
 
-var href = new URL(location.href);
-if(href.searchParams.get("o") != null)
-	url = href.searchParams.get("o");
+//Wczytywanie wybranego obrazu
+function wczytajObraz()
+{
+	$("<img/>")
+		.on('load', function()
+		{
+			proporcjaObr = this.naturalWidth / this.naturalHeight;
+			zmienRozmiar();
+			utworzPuzzle();
+		})
+		.on('error', function() { console.log("Błąd wczytywania obrazu"); })
+		.attr("src", url);
+
+	puzzle = [];
+	puste = {x: rozmiarX - 1, y: rozmiarY - 1};
+}
+
+//Pobieranie argumentów
+let href = new URL(location.href);
 
 if(href.searchParams.get("r") != null)
 {
@@ -28,18 +47,39 @@ if (rozmiarX < 2)
 if (rozmiarY < 2)
 	rozmiarY = 2;
 
-$("<img/>")
-	.on('load', function()
+if(href.searchParams.get("o") != null)
+{
+	url = href.searchParams.get("o");
+	wczytajObraz();
+}
+else
+{
+	if(href.searchParams.get("l") != null)
 	{
-		proporcjaObr = this.naturalWidth / this.naturalHeight;
-		zmienRozmiar();
-		utworzPuzzle();
-	})
-	.on('error', function() { console.log("Błąd wczytywania obrazu"); })
-	.attr("src", url);
+		$.get(href.searchParams.get("l"), function(obrazySTR)
+		{
+			let linki = obrazySTR.split('\n');
+			let urlTekst = linki[Math.floor(Math.random() * linki.length)];
 
-let puzzle = [];
-let puste = {x: rozmiarX - 1, y: rozmiarY - 1};
+			let wReg = urlTekst.match(/(\d*) ?(\d*) ?(.*)/);
+			console.log(wReg);
+			if (wReg[1] != "")
+			{
+				rozmiarX = parseInt(wReg[1]);
+				rozmiarY = parseInt(wReg[1]);
+			}
+			if (wReg[2] != "")
+				rozmiarY = parseInt(wReg[2]);
+
+			if (wReg[3] != "")
+				url = wReg[3];
+
+			wczytajObraz();
+		});
+	}
+	else
+		wczytajObraz();
+}
 
 function Puzel(url, x, y)
 {
