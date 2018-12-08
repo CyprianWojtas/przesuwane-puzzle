@@ -1,5 +1,8 @@
-let url = "https://placekitten.com/1200";
-let rozmiar = 4;
+let url = "https://picsum.photos/1000?v=" + Date.now();
+let rozmiarX = 4,
+		rozmiarY = 4;
+
+let proporcjaObr = 1;
 
 var style = document.createElement('style');
 document.body.appendChild(style);
@@ -9,9 +12,34 @@ if(href.searchParams.get("o") != null)
 	url = href.searchParams.get("o");
 
 if(href.searchParams.get("r") != null)
-	rozmiar = parseInt(href.searchParams.get("r"));
+{
+	rozmiarX = parseInt(href.searchParams.get("r"));
+	rozmiarY = parseInt(href.searchParams.get("r"));
+}
+
+if(href.searchParams.get("rx") != null)
+	rozmiarX = parseInt(href.searchParams.get("rx"));
+
+if(href.searchParams.get("ry") != null)
+	rozmiarY = parseInt(href.searchParams.get("ry"));
+
+if (rozmiarX < 2)
+	rozmiarX = 2;
+if (rozmiarY < 2)
+	rozmiarY = 2;
+
+$("<img/>")
+	.on('load', function()
+	{
+		proporcjaObr = this.naturalWidth / this.naturalHeight;
+		zmienRozmiar();
+		utworzPuzzle();
+	})
+	.on('error', function() { console.log("Błąd wczytywania obrazu"); })
+	.attr("src", url);
 
 let puzzle = [];
+let puste = {x: rozmiarX - 1, y: rozmiarY - 1};
 
 function Puzel(url, x, y)
 {
@@ -19,17 +47,28 @@ function Puzel(url, x, y)
 	this.y = 0;
 	this.ukryty = false;
 
-	this.elementHTML = $('<div style="background-image: url(' + url + '); background-position-x: ' + (- (100 / rozmiar) * x) + 'vh; background-position-y: ' + (- (100 / rozmiar) * y) + 'vh; top: 0; left: 0; width: ' + (100 / rozmiar) + 'vh; height: ' + (100 / rozmiar) + 'vh;" onClick="przesuwanie(' + x+ ', ' + y + ', true)"></div>');
+	this.elementHTML = $('<div onClick="przesuwanie(' + x+ ', ' + y + ', true)"></div>');
+	this.elementHTML.css(
+		{
+			"background-image": 'url(' + url + ')',
+			"background-position": ((100 / (rozmiarX - 1)) * x) + '% ' + ((100 / (rozmiarY - 1)) * y) + '%',
+			"background-size": (100 * rozmiarX) + "% " + (100 * rozmiarY) + "%",
+			"width": (100 / rozmiarX) + '%',
+			"height": (100 / rozmiarY) + '%',
+			"left": ((100 / rozmiarX) * x) + "%",
+			"top": ((100 / rozmiarY) * y) + "%",
+			"display": "none"
+		});
 
 	this.przesun = function (x, y)
 	{
-		this.elementHTML.css({"left": ((100 / rozmiar) * x) + "vh", "top": ((100 / rozmiar) * y) + "vh"});
+		this.elementHTML.css({"left": ((100 / rozmiarX) * x) + "%", "top": ((100 / rozmiarY) * y) + "%"});
 		this.x = x;
 		this.y = y;
 	}
 	this.ukryj = function ()
 	{
-		this.elementHTML.fadeOut(0);
+		this.elementHTML.fadeOut();
 		this.ukryty = true;
 	}
 	this.pokaz = function ()
@@ -40,75 +79,82 @@ function Puzel(url, x, y)
 	this.stworz = function ()
 	{
 		$(".puzzle").append(this.elementHTML);
+		this.elementHTML.fadeIn();
 	}
 }
 
-for (let i = 0; i < rozmiar; i++)
+function utworzPuzzle()
 {
-	puzzle[i] = [];
-
-	for (let j = 0; j < rozmiar; j++)
+	for (let i = 0; i < rozmiarX; i++)
 	{
-		puzzle[i][j] = new Puzel(url, i, j);
-		puzzle[i][j].stworz();
-	}
-}
+		puzzle[i] = [];
 
-let dostepnePola = [];
-for (let i = 0; i < rozmiar; i++)
-	for (let j = 0; j < rozmiar; j++)
-		dostepnePola.push({x: i, y: j});
-
-for (let i = 0; i < rozmiar; i++)
-{
-	for (let j = 0; j < rozmiar; j++)
-	{
-		let pole = dostepnePola.splice(Math.random() * dostepnePola.length | 0, 1)[0];
-
-		//puzzle[i][j].przesun(pole.x, pole.y);
-		puzzle[i][j].przesun(i, j);
-	}
-}
-
-//puzzle[Math.random() * rozmiar | 0][Math.random() * rozmiar | 0].ukryj();
-let puste = {x: rozmiar - 1, y: rozmiar - 1};
-puzzle[puste.x][puste.y].ukryj();
-
-function mieszaj(ile)
-{
-	if (ile > 0)
-	{
-		if (ile%2)
+		for (let j = 0; j < rozmiarY; j++)
 		{
-			let nx = Math.random() * rozmiar | 0;
-			przesuwanie(nx, puzzle[puste.x][puste.y].y, false);
+			puzzle[i][j] = new Puzel(url, i, j);
+			puzzle[i][j].stworz();
+		}
+	}
+
+	let dostepnePola = [];
+	for (let i = 0; i < rozmiarX; i++)
+		for (let j = 0; j < rozmiarY; j++)
+			dostepnePola.push({x: i, y: j});
+
+	for (let i = 0; i < rozmiarX; i++)
+	{
+		for (let j = 0; j < rozmiarY; j++)
+		{
+			let pole = dostepnePola.splice(Math.random() * dostepnePola.length | 0, 1)[0];
+
+			//puzzle[i][j].przesun(pole.x, pole.y);
+			puzzle[i][j].przesun(i, j);
+		}
+	}
+
+	//puzzle[Math.random() * rozmiar | 0][Math.random() * rozmiar | 0].ukryj();
+
+	function mieszaj(ile)
+	{
+		if (ile > 0)
+		{
+			if (ile%2)
+			{
+				let nx = Math.random() * rozmiarX | 0;
+				przesuwanie(nx, puzzle[puste.x][puste.y].y, false);
+			}
+			else
+			{
+				let ny = Math.random() * rozmiarY | 0;
+				przesuwanie(puzzle[puste.x][puste.y].x, ny, false);
+			}
+
+			if (ile%(rozmiarX * 5))
+				mieszaj(ile - 1);
+			else
+				setTimeout(() => { mieszaj(ile - 1); }, 100);
 		}
 		else
 		{
-			let ny = Math.random() * rozmiar | 0;
-			przesuwanie(puzzle[puste.x][puste.y].x, ny, false);
+			style.innerHTML = ".puzzle div {cursor: pointer;}";
 		}
-
-		if (ile%(rozmiar * 5))
-			mieszaj(ile - 1);
-		else
-			setTimeout(() => { mieszaj(ile - 1); }, 100);
 	}
-	else
+	setTimeout(() =>
 	{
-		style.innerHTML = ".puzzle div {cursor: pointer;}";
-	}
+		puzzle[puste.x][puste.y].ukryj();
+		setTimeout(() => { mieszaj(rozmiarX * rozmiarY * 50); }, 500);
+	}, 1000);
+
 }
-setTimeout(() => { mieszaj(Math.pow(rozmiar, 2) * 50); }, 500);
 
 
 function przesuwanie(x, y, sprawdzanie)
 {
 	function przesunLinie(xp, yp, xo, yo, xd, yd)
 	{
-		for (let i = 0; i < rozmiar; i++)
+		for (let i = 0; i < rozmiarX; i++)
 		{
-			for (let j = 0; j < rozmiar; j++)
+			for (let j = 0; j < rozmiarY; j++)
 			{
 				if
 				(
@@ -160,22 +206,22 @@ function przesuwanie(x, y, sprawdzanie)
 		{
 			let px = puste.x;
 			let py = puste.y;
+			puste.x = -1;
+			puste.y = -1;
 			setTimeout(() =>
 			{
 				puzzle[px][py].pokaz();
 				style.innerHTML = ".puzzle div {box-shadow: none; cursor: initial;}";
 				$(".odNowa").delay(750).fadeIn();
 			}, 500);
-			puste.x = -1;
-			puste.y = -1;
 		}
 	}
 }
 function czyUlozono()
 {
-	for (let i = 0; i < rozmiar; i++)
+	for (let i = 0; i < rozmiarX; i++)
 	{
-		for (let j = 0; j < rozmiar; j++)
+		for (let j = 0; j < rozmiarY; j++)
 		{
 			if(puzzle[i][j].x != i || puzzle[i][j].y != j)
 				return false;
@@ -183,3 +229,27 @@ function czyUlozono()
 	}
 	return true;
 }
+function zmienRozmiar()
+{
+	let proporcjaOkn = window.innerWidth / window.innerHeight;
+	if (proporcjaOkn > proporcjaObr)
+	{
+		$(".puzzle").css(
+		{
+			"width": 100 * proporcjaObr + "vh",
+			"height": "100vh",
+			"margin-top": "0"
+		});
+	}
+	else
+	{
+		$(".puzzle").css(
+		{
+			"width": "100vw",
+			"height": 100 / proporcjaObr + "vw",
+			"margin-top": "calc(50vh - " + 100 / proporcjaObr + "vw / 2)"
+		});
+	}
+}
+
+window.addEventListener("resize", zmienRozmiar);
