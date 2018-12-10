@@ -31,23 +31,6 @@
 					document.getElementById("puzzle").setAttribute("src", "puzzle.html?rx=" + x + "&ry=" + y);
 			}
 			ustaw();
-
-			function rozmiarOkna()
-			{
-				if (window.innerHeight / window.innerWidth < 1)
-				{
-					document.getElementById("puzzle").setAttribute("class", "p");
-					document.getElementById("opcje").setAttribute("class", "p");
-				}
-				else
-				{
-					document.getElementById("puzzle").setAttribute("class", "");
-					document.getElementById("opcje").setAttribute("class", "");
-				}
-
-			}
-			rozmiarOkna();
-			window.addEventListener("resize", rozmiarOkna);
 		</script>
 	</body>
 </html>
