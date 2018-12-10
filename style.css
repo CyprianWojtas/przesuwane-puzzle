@@ -45,7 +45,7 @@ body
 }
 .tlo
 {
-	position: absolute;
+	position: fixed;
 	width: calc(100vw + 20px);
 	height: calc(100vh + 20px);
 	background-size: cover;
