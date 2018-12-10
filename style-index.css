@@ -34,7 +34,7 @@ body
 #opcje.p
 {
 	width: 300px;
-	height: calc(100vh - 40px);
+	max-height: calc(100vh - 40px);
 	display: inline-block;
 }
 button
