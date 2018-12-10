@@ -1,6 +1,6 @@
 let url = "https://picsum.photos/1000?v=" + Date.now();
 let rozmiarX = 4,
-		rozmiarY = 4;
+	rozmiarY = 4;
 
 let proporcjaObr = 1;
 
@@ -19,6 +19,7 @@ function wczytajObraz()
 			proporcjaObr = this.naturalWidth / this.naturalHeight;
 			zmienRozmiar();
 			utworzPuzzle();
+			$("body").prepend("<div style='background-image: url(" + url + ")' class='tlo'></div>");
 		})
 		.on('error', function() { console.log("Błąd wczytywania obrazu"); })
 		.attr("src", url);
@@ -78,7 +79,16 @@ else
 		});
 	}
 	else
+	{
+		let s = rozmiarX / rozmiarY;
+		
+		if (s > 1)
+			url = "https://picsum.photos/" + 1500 + "/" + (1500 / s) + "?v=" + Date.now();
+		else
+			url = "https://picsum.photos/" + (1500 * s) + "/" + 1500 + "?v=" + Date.now();
+
 		wczytajObraz();
+	}
 }
 
 function Puzel(url, x, y)
