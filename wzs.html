@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Przesuwane puzzle</title>
+		<link rel="stylesheet" href="style-index.css">
+		<link rel="stylesheet" href="style-wzs.css">
+		<link rel="icon" href="img/ikona.ico">
+		<link rel="manifest" href="manifest.json">
+		<script src="jquery-3.3.1.min.js"></script>
+	</head>
+	<body>
+		<iframe id="puzzle" src="puzzle.html"></iframe>
+		<div id="opcje">
+			<h1>Wybierz obraz</h1>
+			<img data-x="6" data-y="4" src="http://www.wzs.zator.pl/images/slider/12.jpg" alt="">
+			<img data-x="6" data-y="3" src="http://www.wzs.zator.pl/images/2018/63/kartkaSwiateczna.jpg" alt="">
+			<img data-x="9" data-y="4" src="http://www.wzs.zator.pl/images/2018/60/3.jpg" alt="">
+			<img data-x="6" data-y="4" src="http://www.wzs.zator.pl/images/2018/66/11.jpg" alt="">
+			<img data-x="6" data-y="4" src="http://www.wzs.zator.pl/images/2018/66/8.jpg" alt="">
+			<img data-x="6" data-y="5" src="http://www.wzs.zator.pl/images/2018/56/3.jpg" alt="">
+		</div>
+		<script>
+			$("#opcje img").click(function ()
+			{
+				console.log(this);
+				let x = this.dataset.x;
+				let y = this.dataset.y;
+				let o = this.src;
+
+				if (o != "")
+					$("#puzzle").attr("src", "puzzle.html?rx=" + x + "&ry=" + y + "&o=" + encodeURIComponent(o));
+				else
+					$("#puzzle").attr("src", "puzzle.html?rx=" + x + "&ry=" + y);
+			});
+
+			$("#puzzle").attr("src", "puzzle.html?rx=6&ry=4&o=http%3A%2F%2Fwww.wzs.zator.pl%2Fimages%2Fslider%2F12.jpg");
+		</script>
+	</body>
+</html>
