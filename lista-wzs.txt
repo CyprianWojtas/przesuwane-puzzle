@@ -1,0 +1,5 @@
+7 4 img/wzs/TI.png
+5 4 img/wzs/T¯.png
+5 4 img/wzs/TM.png
+5 4 img/wzs/TOT.png
+5 4 img/wzs/TMECH.png
